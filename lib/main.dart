@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'location/location_service.dart';
 
 const bool kDevFakeGps = bool.fromEnvironment('FAKE_GPS', defaultValue: false);
@@ -24,7 +25,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -34,10 +34,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _locService = LocationService();
 
+  GoogleMapController? _mapController;
   AppLocation? _loc;
-  String? _error;
-
-  int _counter = 0;
 
   @override
   void initState() {
@@ -46,55 +44,38 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _loadLocation() async {
-    try {
-      final loc = await _locService.getCurrent();
-      if (!mounted) return;
-      setState(() => _loc = loc);
-    } catch (e) {
-      if (!mounted) return;
-      setState(() => _error = e.toString());
-    }
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    final loc = await _locService.getCurrent();
+    if (!mounted) return;
+    setState(() => _loc = loc);
   }
 
   @override
   Widget build(BuildContext context) {
-    final locText = _error != null
-        ? 'ERROR: $_error'
-        : (_loc == null
-            ? 'Location: loading...'
-            : 'Location: ${_loc!.lat}, ${_loc!.lng}');
+    if (_loc == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    final userPos = LatLng(_loc!.lat, _loc!.lng);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('FAKE_GPS: $kDevFakeGps'),
-            const SizedBox(height: 12),
-            Text(locText),
-            const SizedBox(height: 24),
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: userPos,
+          zoom: 16,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        myLocationEnabled: true,
+        markers: {
+          Marker(
+            markerId: const MarkerId('user'),
+            position: userPos,
+          ),
+        },
+        onMapCreated: (c) => _mapController = c,
       ),
     );
   }
