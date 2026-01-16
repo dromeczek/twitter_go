@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+const bool kDevFakeGps = bool.fromEnvironment('FAKE_GPS', defaultValue: false);
 void main() {
   runApp(const MyApp());
 }
@@ -104,7 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+            Text('FAKE_GPS: $kDevFakeGps'),
+const SizedBox(height: 12),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
