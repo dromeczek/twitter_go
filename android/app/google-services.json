@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225627365010",
+    "project_id": "twiter-go",
+    "storage_bucket": "twiter-go.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225627365010:android:e51f9db1fe7120bea6904b",
+        "android_client_info": {
+          "package_name": "com.example.twitter_go"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLp_iBDs1mVY8ItW-ZsTwcWVsboq3FxIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'post.dart';
 
 class FirestorePostsRepo {
-  final _col = FirebaseFirestore.instance.collection('posts');
+  final CollectionReference<Map<String, dynamic>> _col =
+      FirebaseFirestore.instance.collection('posts');
 
   Stream<List<Post>> streamPosts() {
     return _col
